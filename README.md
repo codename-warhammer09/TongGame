@@ -1,18 +1,3 @@
-## Getting Started
+ TONG is a Pong Clone developed in Java as a hobby/learner project. 
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
-
-## Folder Structure
-
-The workspace contains two folders by default, where:
-
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
-
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
-
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
-
-## Dependency Management
-
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+ It is currently in the earliest phases of development and is used as a vessel for the author's own learning journey towards developing proficiency in Java. The game aims to emulate the original Pong game as closely as possible to develop fundamental technical knowledge.
