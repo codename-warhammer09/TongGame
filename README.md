@@ -10,10 +10,10 @@ The current version of the program includes:
 
 - a fixed 800x600 game window
 - a black game board with a centered divider line
-- a player-controlled paddle on the left side
+- a player-controlled paddle on the left side (which also stops at screen edge)
 - an AI-controlled paddle on the right side
 - a ball that moves continuously across the screen
-- wall bouncing behavior for the top and bottom edges
+- wall bouncing behavior for the frame edges
 - score display for both the player and the AI
 - keyboard controls using the Up and Down arrow keys
 - a 60 FPS-style update loop using Swing's `Timer`
