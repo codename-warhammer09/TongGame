@@ -88,29 +88,40 @@ private void updateGame(){
     if (aiCenter < ballY && aiY < HEIGHT - 100) aiY += 4; // Move AI paddle down. 
     // Moves slower so you have a fighting chance.
     else if (aiCenter > ballY && aiY > 0) aiY -= 4; // Move AI paddle up
+
     // Programmed Motion of the Ball. Basics Physics. Physics of Tong.
     // Okay, I'll see myself out.
     ballX += ballVelX; // Move the ball in X direction
     ballY += ballVelY; // Move the ball in Y direction
-    // Bounce off screen boundaries
-    if (ballX <= 0 || ballX >= WIDTH - 15) ballVelX *= -1;
-    if (ballY <= 0 || ballY >= HEIGHT - 15) ballVelY *= -1;
+
+    // Bounce off top and bottom wall, but do not bounce off left/right walls.
+    // Those edges are where scoring happens in Pong.
+    if (ballY <= 0 || ballY >= HEIGHT - 15) {
+        ballVelY *= -1;
+        ballY = Math.max(0, Math.min(ballY, HEIGHT - 15));
+    }
+
     // NOW FOR PADDLE COLLISIONS!!
     // Player Paddle Collision
     if (ballX <= 45 && ballY + 15 >= playerY && ballY <= playerY + 100) {
-        ballVelX *= -1; // Bounce off player paddle
+        ballVelX = Math.abs(ballVelX); // Bounce off player paddle
+        ballX = 45;
     }
     if (ballX + 15 >= WIDTH - 45 && ballY + 15 >= aiY && ballY <= aiY + 100) {
-        ballVelX *= -1; // Bounce off AI paddle
+        ballVelX = -Math.abs(ballVelX); // Bounce off AI paddle
+        ballX = WIDTH - 60;
     }
+
     // Now for some mild scoring. Cuz we gotta keep score, boiz.
     if (ballX < 0) { // Player missed the ball
         aiScore++;
         resetBall();
+        return;
     }
     else if (ballX > WIDTH - 15) { // AI missed the ball
         playerScore++;
         resetBall();
+        return;
     }
 }
 private void resetBall(){
