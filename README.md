@@ -1,65 +1,78 @@
 # TONG
 
-TONG is a small Java Pong-style arcade game built as a hobby project and learning exercise. It uses Swing to create a simple windowed game, renders the board directly in Java, and demonstrates how a minimal game loop, keyboard input, and sprite-style drawing can be implemented without a larger game engine.
+TONG is a Java-based Pong-inspired game built as a hobby project and learning exercise. The current version is a playable prototype that demonstrates core game development concepts in Swing: rendering, input handling, motion, collision checks, AI tracking, and score updates.
 
-The project is intentionally lightweight and beginner-friendly, with a focus on learning Java game development fundamentals through a classic and recognizable mechanic: paddles, a moving ball, and score tracking.
+This project is intentionally simple and intentionally iterative. It is designed to teach Java fundamentals through a familiar and approachable game structure rather than to mimic a fully polished arcade production.
 
-## Current Features
+## Current State of the Game
 
-The current version of the program includes:
+The program now includes the following features:
 
 - a fixed 800x600 game window
-- a black game board with a centered divider line
-- a player-controlled paddle on the left side
+- a black arena with a central divider
+- a player paddle on the left side
 - an AI-controlled paddle on the right side
-- a ball that moves continuously across the screen
-- wall bouncing behavior for the top and bottom edges
-- score display for both the player and the AI
-- keyboard controls using the Up and Down arrow keys
-- a 60 FPS-style update loop using Swing's `Timer`
+- a moving ball with X/Y velocity
+- wall collision at the top and bottom of the screen
+- paddle collision detection for both paddles
+- score counting when the ball passes a paddle
+- automatic ball reset after a point is scored
+- keyboard movement with the Up and Down arrow keys
+- a continuous game loop driven by Swing's `Timer`
 
-## How the Game Works
+## Gameplay Loop
 
-The project is built around a single `TongGame` class that extends `JPanel`. That class is responsible for:
+The game loop is centered around a single class, `TongGame`, which extends `JPanel` and implements `ActionListener` and `KeyListener`.
 
-- drawing the game scene
-- holding the current game state
-- updating positions each tick
-- listening for keyboard input
-- repainting the screen at a regular interval
+The flow is straightforward:
 
-A `JFrame` hosts the panel, and the application is launched from the `main` method.
+1. the window is created with a `JFrame`
+2. the panel is added to the frame
+3. a `Timer` fires every ~16 ms
+4. `updateGame()` modifies object positions and states
+5. `paintComponent()` redraws the scene
+6. keyboard input updates the player's paddle position
 
-## Architecture
+This produces a simple but functional game loop suitable for learning real-time game design in Java.
 
-The implementation is deliberately simple and compact:
+## Architecture and Design
 
-- `TongGame` extends `JPanel` and acts as the game surface
-- `paintComponent(Graphics g)` renders the scene
-- `actionPerformed(ActionEvent e)` drives the update loop
-- `updateGame()` handles movement and basic physics
-- `keyPressed()` and `keyReleased()` respond to keyboard input
-- `Timer` repeatedly calls the game update code
+The project is intentionally compact and centered on one file:
 
-This gives the project a classic prototype-game structure: state + render + input + loop.
+- `TongGame.java` contains the full gameplay logic and rendering code
+- the class stores game state using instance variables
+- moving objects are updated by the `updateGame()` method
+- rendering is handled in `paintComponent(Graphics g)`
+- keyboard events are handled with `keyPressed()` and `keyReleased()`
+- the timer calls `actionPerformed()` repeatedly to drive the simulation
 
-## Game State
+## Core Mechanics
 
-The program stores the following values in the class:
+### Player movement
 
-- `playerY` — player paddle Y position
-- `aiY` — AI paddle Y position
-- `ballX` and `ballY` — ball position
-- `playerScore` and `aiScore` — current scoreboard values
-- `ballVelX` and `ballVelY` — ball velocity in X and Y directions
-- `upPressed` and `downPressed` — keyboard state tracking for the player's movement
+The left paddle moves vertically using the arrow keys:
 
-## Controls
+- Up Arrow: move upward
+- Down Arrow: move downward
 
-Use the keyboard to move the player paddle:
+The player cannot move beyond the top or bottom bounds of the screen.
 
-- Up Arrow: move up
-- Down Arrow: move down
+### AI movement
+
+The right paddle follows the ball's vertical position using a simple tracking algorithm. It moves up or down toward the ball's center, creating a basic opponent that chases the ball.
+
+### Ball physics
+
+The ball uses velocity values for horizontal and vertical motion:
+
+- `ballVelX` controls left/right direction
+- `ballVelY` controls up/down movement
+
+The ball bounces off the top and bottom edges and reverses direction when it hits either paddle.
+
+### Scoring
+
+If the ball passes beyond the player or AI side, the opposing side gains a point and the ball resets to the center of the screen. The ball then launches back in the opposite direction with a new velocity.
 
 ## Project Structure
 
@@ -71,15 +84,16 @@ TongGame/
 ├── src/
 │   └── TongGame.java
 ├── .git/
-└── .vscode/
+├── .vscode/
+└── .idea/
 ```
 
 ## Running the Game
 
-### Requirements
+### Prerequisites
 
-- JDK installed on your machine
-- a terminal/command prompt
+- JDK installed on the system
+- a terminal or command prompt
 
 ### Compile
 
@@ -93,28 +107,31 @@ javac -d bin src/TongGame.java
 java -cp bin TongGame
 ```
 
-## Notes on the Current Build
+## Current Limitations
 
-This version is still in an early stage of development. It demonstrates the core mechanics of a Pong-like game but does not yet include full gameplay features such as:
+This is still an early-stage learning project and is not yet a polished Pong clone. It does not include:
 
-- paddle-ball collision handling
-- proper AI scoring logic
-- server/client architecture or advanced game systems
-- menus, sound, or polished visuals
+- a start menu or game-over screen
+- sound effects
+- advanced AI difficulty tuning
+- polished visual effects
+- win conditions beyond score tracking
+- networked or multiform gameplay
 
-Instead, it focuses on learning Java GUI programming and basic game loop patterns.
+Instead, it focuses on core Java and game logic fundamentals in a compact, understandable format.
 
 ## Learning Purpose
 
-This project is primarily a practice project for Java and game development fundamentals. It is useful for exploring:
+TONG exists as a practical Java learning tool and is useful for understanding:
 
-- Swing GUI construction
+- Swing-based GUI development
+- object-oriented game design
+- game state management
 - event-driven programming
-- rendering graphics with `Graphics2D`
-- simple game loops using `Timer`
-- input handling with `KeyListener`
-- basic game state management
+- real-time animation with a timer loop
+- simple physics and collision logic
+- AI behavior in a basic game environment
 
 ## Credits
 
-Created as a Java-based Pong-inspired learning project by Arsal Abbas Mirza.
+Developed as a Java Pong-inspired learning project by Arsal Abbas Mirza.

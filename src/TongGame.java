@@ -83,6 +83,11 @@ private void updateGame(){
     if (upPressed && playerY > 0) playerY -= 7; // Move up
     if (downPressed && playerY < HEIGHT - 100) playerY += 7; // Move down
 
+    // Ball Tracking pesky AI. The (pesky) AI of Tong.
+    int aiCenter = aiY + 50; // Center of AI paddle
+    if (aiCenter < ballY && aiY < HEIGHT - 100) aiY += 4; // Move AI paddle down. 
+    // Moves slower so you have a fighting chance.
+    else if (aiCenter > ballY && aiY > 0) aiY -= 4; // Move AI paddle up
     // Programmed Motion of the Ball. Basics Physics. Physics of Tong.
     // Okay, I'll see myself out.
     ballX += ballVelX; // Move the ball in X direction
@@ -90,7 +95,30 @@ private void updateGame(){
     // Bounce off screen boundaries
     if (ballX <= 0 || ballX >= WIDTH - 15) ballVelX *= -1;
     if (ballY <= 0 || ballY >= HEIGHT - 15) ballVelY *= -1;
+    // NOW FOR PADDLE COLLISIONS!!
+    // Player Paddle Collision
+    if (ballX <= 45 && ballY + 15 >= playerY && ballY <= playerY + 100) {
+        ballVelX *= -1; // Bounce off player paddle
+    }
+    if (ballX + 15 >= WIDTH - 45 && ballY + 15 >= aiY && ballY <= aiY + 100) {
+        ballVelX *= -1; // Bounce off AI paddle
+    }
+    // Now for some mild scoring. Cuz we gotta keep score, boiz.
+    if (ballX < 0) { // Player missed the ball
+        aiScore++;
+        resetBall();
+    }
+    else if (ballX > WIDTH - 15) { // AI missed the ball
+        playerScore++;
+        resetBall();
+    }
 }
+private void resetBall(){
+    ballX = WIDTH / 2 - 7; // Reset ball position
+    ballY = HEIGHT / 2 - 7;
+    ballVelX = (ballVelX > 0) ? -5 : 5; // Reset ball velocity
+}
+
 @Override 
 public void keyPressed(KeyEvent e){
     int code = e.getKeyCode();
