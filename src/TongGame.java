@@ -104,12 +104,26 @@ private void updateGame(){
     // NOW FOR PADDLE COLLISIONS!!
     // Player Paddle Collision
     if (ballX <= 45 && ballY + 15 >= playerY && ballY <= playerY + 100) {
+        double paddleCenter = playerY + 50; // Center of player paddle
+        double ballCenter = ballY + 7.5; // Center of ball
+        double relativeImpact = (ballCenter - paddleCenter) / 50; // Relative impact position (-1 to 1) of Tong.
+        ballVelY = (int)(relativeImpact * 7); // Adjust ball's Y velocity based on where it hit the paddle
         ballVelX = Math.abs(ballVelX); // Bounce off player paddle
         ballX = 45;
+        if (Math.abs(ballVelX) < 12) ballVelX += 1; // Increase speed slightly after hitting paddle
+        // Tis increases the difficulty curve
+        // The difficulty curve of Tong.
     }
     if (ballX + 15 >= WIDTH - 45 && ballY + 15 >= aiY && ballY <= aiY + 100) {
-        ballVelX = -Math.abs(ballVelX); // Bounce off AI paddle
+        double paddleCenter = aiY + 50.0;
+        double ballCenter = ballY + 7.5;
+        double relativeImpact = (ballCenter - paddleCenter) / 50.0;
+        ballVelY = (int) (relativeImpact * 7);
+        ballVelX = -Math.abs(ballVelX); // Bounce off AI paddle always to the left.
         ballX = WIDTH - 60;
+        if (Math.abs(ballVelX) < 12) {
+        ballVelX--;
+    }
     }
 
     // Now for some mild scoring. Cuz we gotta keep score, boiz.
