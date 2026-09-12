@@ -20,7 +20,12 @@
  import java.awt.event.KeyEvent; // So it knows what a Key event, like a press even is.
  
  public class TongGame extends JPanel implements ActionListener, KeyListener {
-	 // Set Resolution Constants
+	private enum GameState { PLAYING, GAME_OVER } // The Game State. The Game State of Tong. 
+    private GameState gameState = GameState.PLAYING; // The current state of the game. The current state of the game of Tong.
+    private String winnerText = "";
+    private static final int WINNING_SCORE = 10; // The score needed to win the game. The score needed to win the game of Tong.
+    // Is this excessive? Yes. Is it necessary? No. Is it funny? Yes. Is it Tong? Yes.
+    // Set Resolution Constants
 	 private static final int WIDTH = 800;
 	 private static final int HEIGHT = 600;
      // Game Object State variables with the starting values initialized.
@@ -56,7 +61,23 @@
         g2.setFont(new Font("Monospaced", Font.BOLD, 40));
         g2.drawString(String.valueOf(playerScore), WIDTH / 4, 50);
         g2.drawString(String.valueOf(aiScore), 3 * WIDTH / 4, 50);
-     }
+        // Now the Code for the Game Over Screen.
+        if (gameState == GameState.GAME_OVER) {// Render Outcome Banner
+        g2.setFont(new Font("Monospaced", Font.BOLD, 60));
+        g2.setColor((winnerText.equals("YOU WIN")) ? Color.GREEN : Color.RED);
+        
+        int mainTextWidth = g2.getFontMetrics().stringWidth(winnerText);
+        g2.drawString(winnerText, (WIDTH - mainTextWidth) / 2, HEIGHT / 2 - 20);
+
+        // Render Subtext
+        g2.setFont(new Font("Monospaced", Font.PLAIN, 20));
+        g2.setColor(Color.WHITE);
+        String subText = "Press any key to restart";
+        int subTextWidth = g2.getFontMetrics().stringWidth(subText);
+        g2.drawString(subText, (WIDTH - subTextWidth) / 2, HEIGHT / 2 + 30);
+    }
+    }
+
     // Boolean flags for when the player presses the up or down keys. This is so we can move the paddle nice and buttery.
      private boolean upPressed = false; // Player Paddle Up Key State
      private boolean downPressed = false; // Player Paddle Down Key State
@@ -79,6 +100,12 @@ public void actionPerformed(ActionEvent e){
     repaint(); // Calls paintComponent to redraw the game
 }
 private void updateGame(){
+    // Game State Validation Code, so it doesn't keep on going past the winning score
+    if (gameState != GameState.PLAYING) {
+       return;
+       // So the physics of Tong don't keep Tonging
+       // even after the game is over. Smart, right? I know. I know. I'm a genius.
+    } 
     // Player Paddle Movement
     if (upPressed && playerY > 0) playerY -= 7; // Move up
     if (downPressed && playerY < HEIGHT - 100) playerY += 7; // Move down
@@ -129,12 +156,24 @@ private void updateGame(){
     // Now for some mild scoring. Cuz we gotta keep score, boiz.
     if (ballX < 0) { // Player missed the ball
         aiScore++;
-        resetBall();
+         if (aiScore >= WINNING_SCORE) {
+            gameState = GameState.GAME_OVER;
+            winnerText = "You Lose!";
+        }
+        else {
+            resetBall();
+        }
         return;
     }
     else if (ballX > WIDTH - 15) { // AI missed the ball
         playerScore++;
-        resetBall();
+         if (playerScore >= WINNING_SCORE) {
+            gameState = GameState.GAME_OVER;
+            winnerText = "You Win!";
+        } 
+        else {
+            resetBall();
+        }
         return;
     }
 }
@@ -143,9 +182,21 @@ private void resetBall(){
     ballY = HEIGHT / 2 - 7;
     ballVelX = (ballVelX > 0) ? -5 : 5; // Reset ball velocity
 }
+private void resetGame(){
+    playerScore = 0;
+    aiScore = 0;
+    playerY = HEIGHT / 2 - 50;
+    aiY = HEIGHT / 2 - 50;
+    resetBall();
+    gameState = GameState.PLAYING;
+}
 
 @Override 
 public void keyPressed(KeyEvent e){
+    if (gameState == GameState.GAME_OVER) {
+        resetGame(); // Reset the game if it's over and any key is pressed.
+        // At that point, you've tonged your last Tong.
+    }
     int code = e.getKeyCode();
     if (code == KeyEvent.VK_UP) upPressed = true; // Up Key Pressed
     if (code == KeyEvent.VK_DOWN) downPressed = true; // Down Key Pressed
