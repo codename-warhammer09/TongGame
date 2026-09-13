@@ -1,5 +1,5 @@
 /* ======= TONG =======
- A simple game based on the classic
+ A simple game based on the classic.
  A hobby project. Mainly written
  During the Night of 12.09.2026 in Java
  and compiled using JDK 25.
@@ -65,7 +65,6 @@
         if (gameState == GameState.GAME_OVER) {// Render Outcome Banner
         g2.setFont(new Font("Monospaced", Font.BOLD, 60));
         g2.setColor((winnerText.equals("YOU WIN")) ? Color.GREEN : Color.RED);
-        
         int mainTextWidth = g2.getFontMetrics().stringWidth(winnerText);
         g2.drawString(winnerText, (WIDTH - mainTextWidth) / 2, HEIGHT / 2 - 20);
 
@@ -75,7 +74,14 @@
         String subText = "Press any key to restart";
         int subTextWidth = g2.getFontMetrics().stringWidth(subText);
         g2.drawString(subText, (WIDTH - subTextWidth) / 2, HEIGHT / 2 + 30);
+
     }
+    // Now for a little branding so we can distribute Tong. Yea, you got it. The branding of Tong.
+    g2.setFont(new Font("Monospaced", Font.PLAIN, 12));
+    g2.setColor(Color.GRAY);
+    String brandingText = "Tong - A simple game based on the classic Pong. Developed by Arsal Abbas Mirza.";
+    int brandingTextWidth = g2.getFontMetrics().stringWidth(brandingText);
+    g2.drawString(brandingText, (WIDTH - brandingTextWidth) / 2, HEIGHT - 10);
     }
 
     // Boolean flags for when the player presses the up or down keys. This is so we can move the paddle nice and buttery.
