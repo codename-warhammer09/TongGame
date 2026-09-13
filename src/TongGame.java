@@ -164,7 +164,7 @@ private void updateGame(){
         aiScore++;
          if (aiScore >= WINNING_SCORE) {
             gameState = GameState.GAME_OVER;
-            winnerText = "You Lose!";
+            winnerText = "YOU LOSE!";
         }
         else {
             resetBall();
@@ -175,7 +175,7 @@ private void updateGame(){
         playerScore++;
          if (playerScore >= WINNING_SCORE) {
             gameState = GameState.GAME_OVER;
-            winnerText = "You Win!";
+            winnerText = "YOU WIN!";
         } 
         else {
             resetBall();
