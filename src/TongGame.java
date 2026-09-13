@@ -159,7 +159,7 @@ private void updateGame(){
     }
     }
 
-    // Now for some mild scoring. Cuz we gotta keep score, boiz.
+    // Now for some mildly advanced scoring. Cuz we gotta keep score, boiz.
     if (ballX < 0) { // Player missed the ball
         aiScore++;
          if (aiScore >= WINNING_SCORE) {
@@ -189,6 +189,8 @@ private void resetBall(){
     ballVelX = (ballVelX > 0) ? -5 : 5; // Reset ball velocity
 }
 private void resetGame(){
+    // A helper function to reset the game once any key is pressed after a game over.
+    // It is thus, a reset. A reset of Tong.
     playerScore = 0;
     aiScore = 0;
     playerY = HEIGHT / 2 - 50;

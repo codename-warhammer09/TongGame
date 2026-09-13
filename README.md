@@ -1,5 +1,7 @@
 # TONG
 
+**Latest release: v1.13**
+
 TONG is a Java Swing Pong-style game developed as a personal learning project. It is a lightweight arcade prototype built to explore the fundamentals of Java game development, including rendering, keyboard input, collision detection, state management, and real-time animation.
 
 The project is intentionally simple and deliberately iterative. Rather than aiming for a polished commercial game, it focuses on learning by building a recognizable game loop around classic Pong mechanics.
@@ -66,6 +68,7 @@ After a win or loss, any key press resets the game.
 
 ```text
 TongGame/
+├── TongGame.jar
 ├── README.md
 ├── bin/
 ├── lib/
@@ -80,16 +83,29 @@ TongGame/
 
 ### Requirements
 
-- Java JDK installed
-- a terminal or command prompt
+- Java Runtime Environment (JRE) or JDK installed
 
-### Compile
+### v1.13 clickable executable release
+
+Version `v1.13` is distributed as a clickable executable JAR: `TongGame.jar`. Double-click the `.jar` file to launch the game directly, provided Java is installed and `.jar` files are associated with Java on your system.
+
+You can also launch the release from a terminal with:
+
+```bash
+java -jar TongGame.jar
+```
+
+This release does not require compiling the source first.
+
+### Compile from source
+
+To compile the source version yourself, use a Java Development Kit (JDK):
 
 ```bash
 javac -d bin src/TongGame.java
 ```
 
-### Run
+Then run the compiled classes with:
 
 ```bash
 java -cp bin TongGame
