@@ -18,9 +18,13 @@
  import javax.swing.Timer; // Finally, The Timer of Tong. Ugghhh, fine.
  import java.awt.event.KeyListener; // So u can play with yo keyboard
  import java.awt.event.KeyEvent; // So it knows what a Key event, like a press even is.
- 
+ import java.awt.AlphaComposite; 
+ import java.util.LinkedList;
+
+
  public class TongGame extends JPanel implements ActionListener, KeyListener {
 	private enum GameState { PLAYING, GAME_OVER } // The Game State. The Game State of Tong. 
+    private static record TrailPoint(int x, int y){}
     private GameState gameState = GameState.PLAYING; // The current state of the game. The current state of the game of Tong.
     private String winnerText = "";
     private static final int WINNING_SCORE = 10; // The score needed to win the game. The score needed to win the game of Tong.
@@ -37,6 +41,9 @@
      private int aiScore = 0; // Pesky AI's score.
      private int ballVelX = 2; // Ball's X Speed
      private int ballVelY = 2; // Ball's Y Speed
+     // This here will store the previous 10 frames for our Ball Trail Effect.
+     private final LinkedList<TrailPoint> ballTrail = new LinkedList<>();
+     private static final int MAX_TRAIL_LENGTH = 10;
      // The Actual Rendering of the Game. The Code that draws the whole Panel and stuff.
      @Override
      protected void paintComponent(Graphics g){
@@ -51,10 +58,28 @@
         for (int i = 0; i < HEIGHT; i += 30) {
             g2.fillRect(WIDTH / 2 - 2, i, 4, 15); // And we have a net.
         }
-        // Now we go ballin and draw the paddles and za ball.
+        // Now we go ballin and draw the paddles
         g2.setColor(Color.WHITE);
         g2.fillRect(30, playerY, 15, 100); // Our beloved Player Paddle 
         g2.fillRect(WIDTH - 45, aiY, 15, 100); // Pesky AI Paddle
+        // First, for za Balling Trail.
+        for (int i = 0; i < ballTrail.size(); i++){
+            TrailPoint point = ballTrail.get(i);
+            // We make its opacity fade as they get older from 0.9 to 0.1.
+            float alpha = 1.0f - ((float) i / MAX_TRAIL_LENGTH); 
+            // Tapering the ball size a bit
+            int size = 15 - i;
+            if (size < 4) size = 4;
+            //Now we center the offset
+            // so the trails stay in center of the path
+            int offset = (15-size)/2; 
+            // Now for the real rendering of these trails.
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
+            g2.fillOval(point.x() + offset, point.y(), size, size);
+        }
+        // Cleanup from the above trail loop.
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
+        // Now we draw za Ball
         g2.fillOval(ballX, ballY, 15, 15); // Za Ball
         // Now we gotta draw scores, boi. Cuz we gotta keep score
         // How gangsta, amirite? Very Tong.
@@ -64,7 +89,7 @@
         // Now the Code for the Game Over Screen.
         if (gameState == GameState.GAME_OVER) {// Render Outcome Banner
         g2.setFont(new Font("Monospaced", Font.BOLD, 60));
-        g2.setColor((winnerText.equals("YOU WIN")) ? Color.GREEN : Color.RED);
+        g2.setColor((winnerText.equals("YOU WIN!")) ? Color.GREEN : Color.RED);
         int mainTextWidth = g2.getFontMetrics().stringWidth(winnerText);
         g2.drawString(winnerText, (WIDTH - mainTextWidth) / 2, HEIGHT / 2 - 20);
 
@@ -126,7 +151,11 @@ private void updateGame(){
     // Okay, I'll see myself out.
     ballX += ballVelX; // Move the ball in X direction
     ballY += ballVelY; // Move the ball in Y direction
-
+    // Now we record the Trail Positions 
+    ballTrail.addFirst(new TrailPoint(ballX, ballY));
+    if (ballTrail.size() > MAX_TRAIL_LENGTH){
+        ballTrail.removeLast();
+    }
     // Bounce off top and bottom wall, but do not bounce off left/right walls.
     // Those edges are where scoring happens in Pong.
     if (ballY <= 0 || ballY >= HEIGHT - 15) {
@@ -187,6 +216,7 @@ private void resetBall(){
     ballX = WIDTH / 2 - 7; // Reset ball position
     ballY = HEIGHT / 2 - 7;
     ballVelX = (ballVelX > 0) ? -5 : 5; // Reset ball velocity
+    ballTrail.clear();
 }
 private void resetGame(){
     // A helper function to reset the game once any key is pressed after a game over.

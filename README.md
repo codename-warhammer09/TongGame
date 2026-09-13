@@ -15,6 +15,7 @@ The current program includes:
 - a left-side player paddle controlled with the keyboard
 - a right-side AI paddle that tracks the ball
 - a moving ball with directional velocity
+- a dynamic ball trail effect
 - top and bottom wall collision
 - paddle collision detection
 - score tracking for both sides
@@ -85,16 +86,16 @@ TongGame/
 
 - Java Runtime Environment (JRE) or JDK installed
 
-### v1.13 clickable executable release
+### v1.2 executable release
 
-Version `v1.13` is distributed as a clickable executable JAR: `TongGame.jar`. Double-click the `.jar` file to launch the game directly, provided Java is installed and `.jar` files are associated with Java on your system.
+Version `v1.2` is distributed as a clickable executable JAR (which opens the .jar file with the SE Runtime Binary): `TongGame.jar`. Double-click the `.jar` file to launch the game directly, provided Java is installed and `.jar` files are associated with Java on your system.
 
 You can also launch the release from a terminal with:
 
 ```bash
 java -jar TongGame.jar
 ```
-
+Launching the release from a terminal (like cmd), once you have moved to the appropriate directory, is reported to be more stable.
 This release does not require compiling the source first.
 
 ### Compile from source
@@ -113,7 +114,7 @@ java -cp bin TongGame
 
 ## Learning goals
 
-This project is primarily a practice tool for Java and beginner-friendly game development. It helps explore:
+This project is primarily a practice tool for Java and game development fundamentals. It helps explore:
 
 - Swing GUI programming
 - event-driven input handling
@@ -123,16 +124,9 @@ This project is primarily a practice tool for Java and beginner-friendly game de
 - game state transitions
 - AI behavior in simple arcade games
 
-## Current limitations
-
-This is still an early prototype and is intentionally unfinished. It does not yet include:
-
-- sound effects
-- menus or start screens
-- polished art assets
-- advanced multiplayer systems
-- more sophisticated game balancing
-- networking or external libraries
+## Known Bugs
+- Sometimes the ball will hit a particular spot near the center of the left wall and increment the player's score instead of the AI's score.
+- If the ball is approaching linearly the rough position of the right paddle, the AI can cause the appearance of its paddle 'shivering' in place, as it only slightly moves up and down vertically at its precise position rather than staying in place once it is in position.
 
 ## Credits
 
