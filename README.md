@@ -1,6 +1,6 @@
 # TONG
 
-**Latest release: v1.13**
+**Latest release: v1.2**
 
 TONG is a Java Swing Pong-style game developed as a personal learning project. It is a lightweight arcade prototype built to explore the fundamentals of Java game development, including rendering, keyboard input, collision detection, state management, and real-time animation.
 
